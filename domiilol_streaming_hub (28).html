@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOMIILOL - Hub de Juegos & Tierlist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        heading: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        darkBg: '#080c14',
+                        darkCard: '#0f172a',
+                        darkBorder: '#1e293b',
+                        kickGreen: '#53fc18',
+                        kickGreenDark: '#3ebd0f',
+                        brandBlue: '#2563eb',
+                        brandBlueHover: '#1d4ed8',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #060911;
+            color: #f3f4f6;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(83, 252, 24, 0.06) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-modal {
+            background: rgba(4, 7, 13, 0.94);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #060911;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+        .game-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .game-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(83, 252, 24, 0.5);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(83, 252, 24, 0.15);
+        }
+        .tier-row-dropzone {
+            min-height: 95px;
+        }
+        .artist-card {
+            touch-action: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-kickGreen selection:text-black">
+
+    <div id="main-content" class="min-h-screen flex flex-col justify-between">
+        <nav class="bg-slate-950/80 border-b border-slate-800/80 sticky top-0 z-40 backdrop-blur-xl">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCQJadrTGG_qKwtqFsld7epkZQt60O1fxfYR3HnAwRpA&s=10" 
+                         alt="DOMIILOL" class="w-11 h-11 rounded-2xl object-cover border border-slate-700/80 shadow-md">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-heading font-black text-white text-xl tracking-tight">DOMIILOL</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <div class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-2 text-xs font-bold text-slate-300">
+                        <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+                        <span class="text-red-400">En vivo en Kick</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full space-y-10 flex-1">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-slate-900/40 border border-slate-800/80 rounded-3xl p-6 sm:p-10 relative overflow-hidden">
+                <div class="absolute -top-24 -left-24 w-72 h-72 bg-brandBlue/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-24 -right-24 w-72 h-72 bg-kickGreen/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="lg:col-span-7 space-y-6 relative z-10">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-kickGreen/10 border border-kickGreen/30 text-xs font-bold text-kickGreen">
+                        <i class="fa-solid fa-bolt"></i> Comunidad Activa & Directos
+                    </div>
+
+                    <h1 class="font-heading font-black text-3xl sm:text-5xl text-white leading-tight tracking-tight">
+                        Bienvenido a la web de <span class="text-white underline decoration-kickGreen decoration-4 underline-offset-4">DOMIILOL</span>
+                    </h1>
+
+                    <div class="flex flex-wrap items-center gap-4 pt-2">
+                        <a href="#juegos-section" class="px-7 py-4 rounded-2xl bg-kickGreen hover:bg-kickGreenDark text-black font-black text-xs uppercase tracking-wider transition shadow-lg shadow-kickGreen/20 flex items-center gap-2">
+                            Explorar catálogo <i class="fa-solid fa-arrow-down text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 relative z-10 flex justify-center lg:justify-end">
+                    <div class="relative w-full max-w-md aspect-square sm:aspect-4/3 lg:aspect-square bg-slate-800/80 rounded-3xl overflow-hidden border border-slate-700/80 shadow-2xl group">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyqsjoBc8mBWb1DFNzsbAg_uV2mhEYl_aSCATVVgqYzw&s=10" 
+                             alt="DOMIILOL Streamer" 
+                             class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-500">
+                    </div>
+                </div>
+            </div>
+
+            <div id="juegos-section" class="space-y-6 pt-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="font-heading font-black text-xl text-white flex items-center gap-2">
+                        <i class="fa-solid fa-gamepad text-kickGreen"></i> Catálogo de Minijuegos
+                    </h2>
+                </div>
+
+                <div id="games-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Tierlist Card -->
+                    <div class="game-card game-item-web bg-slate-900/60 border border-slate-800 rounded-3xl p-5 flex flex-col justify-between group">
+                        <div class="space-y-4">
+                            <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 p-2 flex items-center justify-center">
+                                <div class="w-full h-full bg-slate-900 rounded-xl border-2 border-slate-700 flex flex-col overflow-hidden shadow-inner">
+                                    <div class="flex-1 flex border-b border-slate-800"><div class="w-7 bg-[#ff3b30] flex items-center justify-center text-[9px] font-black text-white">S</div><div class="flex-1 bg-slate-950"></div></div>
+                                    <div class="flex-1 flex border-b border-slate-800"><div class="w-7 bg-[#ff9500] flex items-center justify-center text-[9px] font-black text-white">A</div><div class="flex-1 bg-slate-950"></div></div>
+                                    <div class="flex-1 flex border-b border-slate-800"><div class="w-7 bg-[#ffcc00] flex items-center justify-center text-[9px] font-black text-white">B</div><div class="flex-1 bg-slate-950"></div></div>
+                                    <div class="flex-1 flex border-b border-slate-800"><div class="w-7 bg-[#34c759] flex items-center justify-center text-[9px] font-black text-white">C</div><div class="flex-1 bg-slate-950"></div></div>
+                                    <div class="flex-1 flex border-b border-slate-800"><div class="w-7 bg-[#007aff] flex items-center justify-center text-[9px] font-black text-white">D</div><div class="flex-1 bg-slate-950"></div></div>
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="font-heading font-black text-white text-base">Tierlist de Cantantes</h3>
+                                <p class="text-xs text-slate-400 font-medium leading-relaxed">Personaliza categorías, sube fotos de tu PC, añade links de YouTube y organiza a todos los artistas.</p>
+                            </div>
+                        </div>
+                        <div class="pt-5 mt-5 border-t border-slate-800/80 flex items-center justify-between">
+                            <span class="text-[11px] font-bold text-slate-400"><i class="fa-solid fa-fire text-kickGreen"></i> Muy popular</span>
+                            <button onclick="openTierlistGame()" class="px-4 py-2.5 rounded-xl bg-kickGreen hover:bg-kickGreenDark text-black font-black text-xs uppercase tracking-wider transition shadow-md shadow-kickGreen/20">
+                                Jugar Ahora
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="bg-slate-950 border-t border-slate-800/80 py-6 text-center text-xs text-slate-500">
+            <p>© DOMIILOL Hub • Plataforma Oficial de Juegos en Vivo</p>
+        </footer>
+    </div>
+
+    <div id="tierlist-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/94 glass-modal hidden">
+        <div class="w-full max-w-7xl bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-7 relative shadow-2xl max-h-[92vh] overflow-y-auto space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-lg shadow">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-heading font-black text-xl text-white">Tierlist de Cantantes & Canciones</h3>
+                        <p class="text-xs text-slate-400">Todos los artistas y canciones preinstalados con sus enlaces de YouTube. Haz clic en cualquier tarjeta para abrir el video.</p>
+                    </div>
+                </div>
+                <button onclick="closeTierlistGame()" class="text-slate-400 hover:text-white p-2.5">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Contenedor con zoom responsivo para vista panorámica óptima en cualquier dispositivo -->
+            <div class="space-y-6 origin-top" style="zoom: 0.76; transform-origin: top center;">
+                <!-- Controles de Gestión Tierlist -->
+                <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl space-y-4 shadow-xl">
+                    <div class="flex flex-wrap gap-3 items-center justify-between">
+                        <div class="flex flex-wrap items-center gap-3">
+                            <button type="button" onclick="addNewTierCategory()" class="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-xl font-black text-xs uppercase tracking-wider flex items-center gap-2 transition cursor-pointer shadow-md shadow-purple-600/25">
+                                <i class="fa-solid fa-plus text-xs"></i> Agregar Categoría Tier
+                            </button>
+                            <button type="button" onclick="toggleArtistDropdown()" class="px-4 py-2.5 bg-gradient-to-r from-kickGreen to-emerald-600 hover:from-kickGreenDark hover:to-emerald-500 text-black font-black rounded-xl text-xs uppercase tracking-wider flex items-center gap-2 transition cursor-pointer shadow-md shadow-kickGreen/20">
+                                <i class="fa-solid fa-user-plus text-xs"></i> Agregar Artista (+)
+                            </button>
+                            <button type="button" onclick="restoreDefaultArtists()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl font-black text-xs uppercase tracking-wider flex items-center gap-2 transition cursor-pointer shadow-md border border-slate-700">
+                                <i class="fa-solid fa-rotate-right text-xs text-kickGreen"></i> Restaurar Artistas & Links
+                            </button>
+                            <button type="button" onclick="exportArtistsJSON()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl font-black text-xs uppercase tracking-wider flex items-center gap-2 transition cursor-pointer shadow-md border border-slate-700">
+                                <i class="fa-solid fa-download text-xs text-blue-400"></i> Exportar Respaldo
+                            </button>
+                            <label class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl font-black text-xs uppercase tracking-wider flex items-center gap-2 transition cursor-pointer shadow-md border border-slate-700">
+                                <i class="fa-solid fa-upload text-xs text-amber-400"></i> Importar Respaldo
+                                <input type="file" accept=".json" class="hidden" onchange="importArtistsJSON(this)">
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Dropdown panel for adding artist -->
+                    <div id="artist-dropdown-panel" class="hidden space-y-3 pt-3 border-t border-slate-800">
+                        <span class="text-xs text-slate-400 font-medium block">Rellena los datos para agregar un artista permanente al banco:</span>
+                        <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                            <div class="sm:col-span-3">
+                                <input type="text" id="new-artist-name" placeholder="Nombre del artista" class="w-full bg-slate-950 border border-slate-800 px-3.5 py-2.5 rounded-xl text-xs text-white focus:outline-none focus:border-kickGreen shadow-inner">
+                            </div>
+                            <div class="sm:col-span-4">
+                                <input type="text" id="new-artist-yt" placeholder="Link YouTube de canción" class="w-full bg-slate-950 border border-slate-800 px-3.5 py-2.5 rounded-xl text-xs text-white focus:outline-none focus:border-kickGreen shadow-inner">
+                            </div>
+                            <div class="sm:col-span-3 flex items-center gap-2">
+                                <label class="w-full text-center px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold cursor-pointer transition truncate border border-slate-700 shadow-sm flex items-center justify-center">
+                                    <i class="fa-solid fa-upload mr-1.5 text-kickGreen"></i> <span id="file-label-text">Elegir Foto PC</span>
+                                    <input type="file" id="new-artist-file" accept="image/*" class="hidden" onchange="updateFileLabel(this)">
+                                </label>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <button type="button" onclick="addNewArtistToBank()" class="w-full py-2.5 bg-kickGreen hover:bg-kickGreenDark text-black font-black rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow-md shadow-kickGreen/20">
+                                    Agregar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contenedor Dinámico de Filas de Tiers -->
+                <div id="tier-rows-container" class="space-y-3"></div>
+
+                <!-- Banco de Artistas con vista espaciosa y buscador -->
+                <div class="bg-slate-900/50 border border-slate-800 p-4 rounded-2xl space-y-3 shadow-xl">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <h4 class="text-xs font-black uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                            <span class="flex items-center gap-2 text-kickGreen"><i class="fa-solid fa-box-archive text-sm"></i> Banco de Artistas & Canciones (Permanente)</span>
+                        </h4>
+                        
+                        <div class="relative w-full sm:w-64">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                            <input type="text" id="artist-search-input" oninput="filterArtistsBySearch()" placeholder="Buscar artista o canción..." class="w-full bg-slate-950 border border-slate-800 pl-9 pr-8 py-2 rounded-xl text-xs text-white focus:outline-none focus:border-kickGreen transition shadow-inner">
+                            <button type="button" onclick="clearSearchInput()" id="clear-search-btn" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="artist-bank" class="tier-row-dropzone bg-slate-950/80 border border-slate-800 rounded-xl p-3.5 flex flex-wrap gap-2.5 items-center min-h-[100px]" ondragover="allowDrop(event)" ondragleave="removeDropStyle(event)" ondrop="dropArtist(event, 'bank')"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit-artist-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/94 glass-modal hidden">
+        <div class="w-full max-w-md bg-slate-950 border border-slate-800 rounded-3xl p-6 sm:p-8 relative shadow-2xl space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <h3 class="font-heading font-black text-lg text-white flex items-center gap-2.5">
+                    <i class="fa-solid fa-gear text-kickGreen"></i> Editar Artista & Enlace
+                </h3>
+                <button onclick="closeEditModal()" class="text-slate-400 hover:text-white p-2">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <input type="hidden" id="edit-artist-id">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5">Nombre del Artista</label>
+                    <input type="text" id="edit-artist-name-input" class="w-full bg-slate-900 border border-slate-800 px-4 py-3 rounded-2xl text-xs text-white focus:outline-none focus:border-kickGreen shadow-inner">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5">Link de YouTube</label>
+                    <input type="text" id="edit-artist-yt-input" class="w-full bg-slate-900 border border-slate-800 px-4 py-3 rounded-2xl text-xs text-white focus:outline-none focus:border-kickGreen shadow-inner">
+                </div>
+            </div>
+            <div class="flex justify-end gap-3 pt-4 border-t border-slate-800">
+                <button type="button" onclick="closeEditModal()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition">Cancelar</button>
+                <button type="button" onclick="saveEditedArtist()" class="px-6 py-2.5 bg-kickGreen hover:bg-kickGreenDark text-black font-black rounded-xl text-xs uppercase tracking-wider transition shadow-lg shadow-kickGreen/20">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let defaultTiersData = [
+            { id: 't-1', name: 'S', color: '#ff3b30' },
+            { id: 't-2', name: 'A', color: '#ff9500' },
+            { id: 't-3', name: 'B', color: '#ffcc00' },
+            { id: 't-4', name: 'C', color: '#34c759' },
+            { id: 't-5', name: 'D', color: '#007aff' },
+            { id: 't-6', name: 'E', color: '#af52de' },
+            { id: 't-7', name: 'F', color: '#ff2d55' }
+        ];
+
+        let tiersData = [...defaultTiersData];
+        let artistsData = [];
+        let searchQuery = '';
+
+        // Lista exacta de artistas obtenida del archivo de respaldo
+        const defaultPreloadedArtists = [
+            { name: 'LAJA', yt: 'https://youtu.be/y_vP2_wdITE?si=D2tb7iEC2KvaXQOB' },
+            { name: 'TYKING', yt: 'https://youtu.be/oSQ7k4JalvU?si=HJ9peJZgCsztVnrw' },
+            { name: 'CHAMAKITO FREZH', yt: 'https://youtu.be/2L8ZX5R6eG0?si=OaQblVNYUQbDb97d' },
+            { name: 'DESGRACIAO 70', yt: 'https://youtu.be/lUonI5CJb2M?si=G1iCUvKkrc_mAjOv' },
+            { name: 'TALI GOYA', yt: 'https://youtu.be/wnBgpYbAdk0?si=O2rHLNXxS9fqzpzC' },
+            { name: 'MEMO ATR', yt: 'https://youtu.be/X03NShGjhoQ?si=xY-UrTCwt6uV7Qau' },
+            { name: 'HARDEN', yt: 'https://youtu.be/9SuSn8SKag0?si=v3wxgkKrOnkxCnGG' },
+            { name: 'FLACOOMC', yt: 'https://youtu.be/-4tICIGZu3Y?si=wgZyg5uouWGcqnc1' },
+            { name: 'PAPY BLACK', yt: 'https://youtu.be/JxtM0_2I-T4?si=gXhaMx3i3CTgK7jx' },
+            { name: 'NAVAJA7EVENUP', yt: 'https://youtu.be/Hjme4Ys8t0E?si=907aMANfLrfr3UiA' },
+            { name: 'BDREW', yt: 'https://youtu.be/39Mb4Pz1dwA?si=J3mMWQWVN8a3oYqd' },
+            { name: 'REVELDE GLOCK', yt: 'https://youtu.be/d6BJTrWUkk0?si=Ezad4JSwBUmUlf8U' },
+            { name: 'YEYOGLOCK', yt: 'https://youtu.be/bOWEjdrRgcU?si=BrffdIlaZ5xEyMUm' },
+            { name: 'BABYLOCC', yt: 'https://youtu.be/8zkX1bfXGP0?si=pOIYAeBLy9sng6TF' },
+            { name: 'BLIZZY 68', yt: 'https://youtu.be/H9gCQ2qjNW4?si=4R5wMVH_wfxHl6te' },
+            { name: 'BLACKY DRIPPY', yt: 'https://youtu.be/n5gMXJ7MID8?si=l0FAZLxKkwiunPjj' },
+            { name: 'YOUNG AVI', yt: 'https://youtu.be/-jpDkWJiQ6o?si=n8W_27xD-TMB4Ze-' },
+            { name: 'LEXXISTO SEV', yt: 'https://youtu.be/nsQhcEIYVeE?si=SB8i0hxA4evhFLAU' },
+            { name: 'POPERULIN', yt: 'https://youtu.be/9jcNc4J647s?si=xBPTj5NtDi4_XqDS' },
+            { name: 'TTSJAY', yt: 'https://youtu.be/FR5RCDzsE-M?si=B3sNHd6uVKSgzzsN' },
+            { name: 'FLAKENSIA', yt: 'https://youtu.be/rvlxZrU7EyE?si=J-p4x46QLxOSvEXn' },
+            { name: 'KENNY CLIMENTE', yt: 'https://youtu.be/QBpWCtMSZ6A?si=wht0zJmvGUl4-5si' },
+            { name: 'GCHAMO', yt: 'https://youtu.be/hKqb_fgpDJk?si=gDs69tFc2RKXGDOA' },
+            { name: 'KEYVIEM', yt: 'https://youtu.be/1-T9A_mzyB0?si=JwjU8bNlPfkyn8uw' },
+            { name: 'MENOL BB7', yt: 'https://youtu.be/lxtt42i9Hzs?si=P8Qxm-dBQq7NeaGF' },
+            { name: 'MOOLAH', yt: 'https://youtu.be/IkeQwAZPcrI?si=1e69Qw2khKpmc2Uo' },
+            { name: 'DOMIILOL', yt: 'https://youtu.be/LV5sgNsx9Io?si=GGdtuusWxb6fU-W8' },
+            { name: 'ANTHOY PATRIA', yt: 'https://youtu.be/6XKpCL-7qdg?si=3XW5GijdY_1X7Iug' },
+            { name: 'COTIZABIIONE', yt: 'https://youtu.be/1vMp-WWoovg?si=4HCo_cC3Cvu9FNZU' },
+            { name: 'DTBDEMON', yt: 'https://youtu.be/bldL882HVlM?si=rsFy8Dt5SvLtphoB' },
+            { name: 'FLACO DRIPPY', yt: 'https://youtu.be/5xyMlq6ASCE?si=YQCBmh_NLvyVaAcv' },
+            { name: 'FLACONDO', yt: 'https://youtu.be/8lzO2P7jjnQ?si=6GhI7fsUXH0__tfm' },
+            { name: 'G LOVE', yt: 'https://youtu.be/w8bZ4YUIASM?si=0onaUb-GBYi-hNa4' },
+            { name: 'YIIEM', yt: 'https://youtu.be/2YHInTGoRKI?si=HMDAh5akI0zJP_ip' },
+            { name: 'JORDAN JJ', yt: 'https://youtu.be/Hqh4UHR8fe4?si=YEw4DmuIV9RQgc_N' },
+            { name: 'FLAKKO DIOR', yt: 'https://youtu.be/0qRqDki7t4g?si=0SKisiCxW2B7JZic' },
+            { name: '2.0 FRAY', yt: 'https://youtu.be/fIevOnJQ5So?si=cLiEgVfZd9wFhsDK' },
+            { name: 'LIIL BUNNIES', yt: 'https://youtu.be/N2NN5cx5vys?si=kaJhlTxVCkqaSs0t' },
+            { name: 'OT RAFI', yt: 'https://youtu.be/Da95LU4DhKE?si=wWEzeUDC4hMpHFGQ' },
+            { name: 'RDRAKO', yt: 'https://youtu.be/8nizQHVNFRI?si=35mYxFrgBvKzKUrg' },
+            { name: 'DAR R ONE', yt: 'https://youtu.be/TtSk8VGXEBk?si=Ztv1xmBLom1lO5yc' },
+            { name: 'VALIRO FILI0', yt: 'https://youtu.be/WK8pEQJCPSQ?si=B3vQQzvAPjsNxDHB' },
+            { name: 'QUEEN PARKER', yt: 'https://youtu.be/K849BYTmy1Y?si=iFl4dT87Z9XXrttI' },
+            { name: 'MENOR CITY', yt: 'https://youtu.be/1mJa5S9nMsc?si=h5tHlQixPh6U2jTZ' },
+            { name: 'MINI LAJA', yt: 'https://youtu.be/1SLvA9tmYQ8?si=VkeJzmwv4aIJ8JHz' },
+            { name: 'LEYENDA X MENOLZOMBIE', yt: 'https://youtu.be/Mrpor-JGDJU?si=2DFwAz886uDdI2nk' },
+            { name: 'NOVA FLOW', yt: 'https://youtu.be/eSFbHKuYWOc?si=qiU_KEpd7M3ZNHgm' },
+            { name: 'RUSSO 170', yt: 'https://youtu.be/MLObRXdniH4?si=TUgZ1fB0spVrMK0s' },
+            { name: 'OG DEMON BOG', yt: 'https://youtu.be/nbq1mzOFuUE?si=3aksnmUvquGpv2CD' },
+            { name: 'LISMAR', yt: 'https://youtu.be/rI0wa6ud0Bw?si=fDCKgx3eer_tfheh' },
+            { name: 'LIL HOMIE', yt: 'https://youtu.be/Q7fu9kq89Co?si=Lh9AO1MN2sbmkz4S' },
+            { name: 'LILSKEELOCC', yt: 'https://youtu.be/4JMfLN38BNA?si=NT79bwoAUDh3zIwz' },
+            { name: 'LOSMELLOSNYC', yt: 'https://youtu.be/QNBG4n-pRXM?si=2Mws4ILbfN00UylX' },
+            { name: 'Mc Albertico', yt: 'https://youtu.be/Edq7IUCz-yc?si=A9d24x1vNMuPswkS' },
+            { name: 'GRETY EL 34', yt: 'https://youtu.be/CD5YepB9nhk?si=HcF6jRD55SD-FHBD' },
+            { name: 'JAY D7', yt: 'https://youtu.be/wfXpUyoBam0?si=OUMk1a5mIdp1dbIJ' },
+            { name: 'ATTACHO', yt: 'https://youtu.be/IMr0La9rYo8?si=cxT7hCZhYGOKQR54' },
+            { name: 'FLACO CR', yt: 'https://youtu.be/49KhBkcnjNY?si=Cv5ndA5IwlxbMdgg' },
+            { name: 'LH KOKO', yt: 'https://youtu.be/7khOOLCOpjs?si=wnPQwzRgZew1_rlZ' }
+        ];
+
+        function loadSavedData() {
+            tiersData = [...defaultTiersData];
+
+            const savedCustomArtists = localStorage.getItem('domi_permanent_artists');
+            let customArtists = [];
+            if (savedCustomArtists) {
+                try { 
+                    customArtists = JSON.parse(savedCustomArtists); 
+                } catch(e) {
+                    console.error("Error al parsear artistas guardados", e);
+                    customArtists = [];
+                }
+            }
+
+            // Filtrar rígidamente cualquier artista mainstream o indeseado
+            const unwantedKeywords = [
+                'arcangel', 'arcángel', 'arcnagel', 'feid', 'quevedo', 'rauw', 
+                'myke towers', 'chief keef', 'karol g', 'young miko', 
+                'daddy yankee', 'bad bunny', 'anuel'
+            ];
+            
+            if (Array.isArray(customArtists)) {
+                customArtists = customArtists.filter(a => {
+                    const nameLower = (a.name || '').toLowerCase();
+                    return !unwantedKeywords.some(keyword => nameLower.includes(keyword));
+                });
+            }
+
+            if (!savedCustomArtists || customArtists.length === 0) {
+                populateDefaultArtists();
+            } else {
+                artistsData = customArtists;
+                
+                // Actualizar o fusionar automáticamente los links y miniaturas de YouTube para cada artista
+                defaultPreloadedArtists.forEach((defItem, idx) => {
+                    const existing = artistsData.find(a => a.name.trim().toLowerCase() === defItem.name.trim().toLowerCase());
+                    const thumb = getYouTubeThumbnail(defItem.yt) || `https://placehold.co/150x150/1e293b/53fc18?text=${encodeURIComponent(defItem.name.substring(0,6))}`;
+                    if (existing) {
+                        if (!existing.yt || existing.yt.trim() === '') {
+                            existing.yt = defItem.yt;
+                        }
+                        if (!existing.img || existing.img.includes('placehold.co')) {
+                            existing.img = thumb;
+                        }
+                    } else {
+                        artistsData.push({
+                            id: 'art-auto-' + Date.now() + '-' + idx,
+                            name: defItem.name,
+                            img: thumb,
+                            yt: defItem.yt || '',
+                            location: 'bank'
+                        });
+                    }
+                });
+                
+                // Asegurar específicamente que VALIRO FILI0, LIIL BUNNIES y COTIZABIIONE tengan su link actualizado
+                artistsData.forEach(a => {
+                    const nameUp = a.name.trim().toUpperCase();
+                    if (nameUp.includes('VALIRO') || nameUp.includes('BUNNIES') || nameUp.includes('COTIZAB')) {
+                        const matchDef = defaultPreloadedArtists.find(d => {
+                            const dUp = d.name.toUpperCase();
+                            return dUp === nameUp || (nameUp.includes('VALIRO') && dUp.includes('VALIRO')) || (nameUp.includes('BUNNIES') && dUp.includes('BUNNIES')) || (nameUp.includes('COTIZAB') && dUp.includes('COTIZAB'));
+                        });
+                        if (matchDef) {
+                            a.yt = matchDef.yt;
+                            a.img = getYouTubeThumbnail(matchDef.yt) || a.img;
+                        }
+                    }
+                });
+
+                // Forzar enlaces exactos solicitados
+                const forcedLinks = [
+                    { name: 'COTIZABIIONE', yt: 'https://youtu.be/1vMp-WWoovg?si=4HCo_cC3Cvu9FNZU' },
+                    { name: 'LIIL BUNNIES', yt: 'https://youtu.be/N2NN5cx5vys?si=kaJhlTxVCkqaSs0t' },
+                    { name: 'VALIRO FILI0', yt: 'https://youtu.be/WK8pEQJCPSQ?si=B3vQQzvAPjsNxDHB' }
+                ];
+                forcedLinks.forEach(f => {
+                    let found = artistsData.find(a => a.name.toUpperCase().includes(f.name.toUpperCase()) || (f.name.includes('VALIRO') && a.name.toUpperCase().includes('VALIRO')));
+                    if (found) {
+                        found.yt = f.yt;
+                        found.img = getYouTubeThumbnail(f.yt) || found.img;
+                    } else {
+                        artistsData.push({
+                            id: 'art-forced-' + Date.now(),
+                            name: f.name,
+                            img: getYouTubeThumbnail(f.yt) || 'https://placehold.co/150x150/1e293b/53fc18?text=' + f.name,
+                            yt: f.yt,
+                            location: 'bank'
+                        });
+                    }
+                });
+
+                // Limpieza final adicional
+                artistsData = artistsData.filter(a => {
+                    const nameLower = (a.name || '').toLowerCase();
+                    return !unwantedKeywords.some(keyword => nameLower.includes(keyword));
+                });
+
+                saveData();
+            }
+        }
+
+        function populateDefaultArtists() {
+            artistsData = defaultPreloadedArtists.map((item, idx) => {
+                const thumb = getYouTubeThumbnail(item.yt) || `https://placehold.co/150x150/1e293b/53fc18?text=${encodeURIComponent(item.name.substring(0,6))}`;
+                return {
+                    id: 'art-default-' + (idx + 1),
+                    name: item.name,
+                    img: thumb,
+                    yt: item.yt,
+                    location: 'bank'
+                };
+            });
+            saveData();
+        }
+
+        function restoreDefaultArtists() {
+            localStorage.removeItem('domi_permanent_artists');
+            populateDefaultArtists();
+            renderTierlist();
+            confetti({ particleCount: 30, spread: 40, origin: { y: 0.7 } });
+            alertMessage('¡Artistas y enlaces de YouTube restaurados correctamente!');
+        }
+
+        function exportArtistsJSON() {
+            const exportPayload = {
+                version: "2.1",
+                app: "DOMIILOL Tierlist Hub",
+                timestamp: new Date().toISOString(),
+                tiers: tiersData,
+                artists: artistsData
+            };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportPayload, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `domiilol_tierlist_respaldo_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            confetti({ particleCount: 35, spread: 50, origin: { y: 0.7 } });
+            alertMessage('¡Respaldo exportado con éxito!');
+        }
+
+        function importArtistsJSON(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (parsed && Array.isArray(parsed.artists)) {
+                        artistsData = parsed.artists;
+                        if (Array.isArray(parsed.tiers) && parsed.tiers.length > 0) {
+                            tiersData = parsed.tiers;
+                        }
+                    } else if (Array.isArray(parsed)) {
+                        artistsData = parsed;
+                    } else {
+                        throw new Error("Formato no reconocido");
+                    }
+                    saveData();
+                    renderTierlist();
+                    confetti({ particleCount: 60, spread: 70, origin: { y: 0.7 } });
+                    alertMessage('¡Respaldo importado con éxito!');
+                } catch(err) {
+                    console.error(err);
+                    alertMessage('Error al leer el archivo JSON de respaldo.');
+                }
+                input.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        function alertMessage(msg) {
+            const notif = document.createElement('div');
+            notif.className = 'fixed bottom-6 right-6 z-50 bg-slate-900 border border-kickGreen text-white px-4 py-3 rounded-2xl shadow-2xl text-xs font-bold flex items-center gap-3 animate-bounce';
+            notif.innerHTML = `<i class="fa-solid fa-circle-check text-kickGreen text-base"></i> <span>${msg}</span>`;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 4000);
+        }
+
+        function getYouTubeThumbnail(url) {
+            if (!url || typeof url !== 'string') return null;
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            if (match && match[2] && match[2].length === 11) {
+                const videoId = match[2];
+                return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+            }
+            return null;
+        }
+
+        function saveData() {
+            try {
+                localStorage.setItem('domi_permanent_artists', JSON.stringify(artistsData));
+            } catch (e) {
+                console.error("Error al guardar en localStorage:", e);
+            }
+        }
+
+        function openTierlistGame() {
+            confetti({ particleCount: 40, spread: 50, origin: { y: 0.7 } });
+            document.getElementById('tierlist-modal').classList.remove('hidden');
+            loadSavedData();
+            renderTierlist();
+        }
+
+        function closeTierlistGame() {
+            document.getElementById('tierlist-modal').classList.add('hidden');
+        }
+
+        function filterArtistsBySearch() {
+            const input = document.getElementById('artist-search-input');
+            const clearBtn = document.getElementById('clear-search-btn');
+            searchQuery = input.value.trim().toLowerCase();
+            
+            if (searchQuery.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+            renderTierlist();
+        }
+
+        function clearSearchInput() {
+            const input = document.getElementById('artist-search-input');
+            input.value = '';
+            filterArtistsBySearch();
+        }
+
+        function renderTierlist() {
+            const container = document.getElementById('tier-rows-container');
+            container.innerHTML = '';
+
+            tiersData.forEach((tier, index) => {
+                const row = document.createElement('div');
+                row.className = 'flex rounded-xl overflow-hidden border border-slate-800 bg-slate-900/60 min-h-[95px] shadow-md';
+
+                const label = document.createElement('div');
+                label.className = 'w-24 sm:w-28 flex items-center justify-center p-2 font-heading font-black text-white text-center relative shrink-0 shadow-sm h-auto';
+                label.style.backgroundColor = tier.color;
+
+                const nameInput = document.createElement('textarea');
+                nameInput.rows = 2;
+                nameInput.value = tier.name;
+                nameInput.className = 'bg-transparent border-0 text-center font-heading font-black text-xs uppercase text-white w-full py-1 px-1 focus:outline-none focus:bg-black/30 rounded-lg transition cursor-pointer resize-none leading-tight overflow-hidden flex items-center justify-center break-words whitespace-normal';
+                nameInput.style.display = 'flex';
+                nameInput.style.alignItems = 'center';
+                
+                nameInput.oninput = (e) => {
+                    tier.name = e.target.value.toUpperCase();
+                };
+
+                label.appendChild(nameInput);
+
+                const dropzone = document.createElement('div');
+                dropzone.className = 'tier-row-dropzone flex-1 p-2.5 flex flex-wrap gap-2.5 items-center bg-slate-950/40';
+                dropzone.id = `zone-${tier.id}`;
+                dropzone.setAttribute('ondragover', 'allowDrop(event)');
+                dropzone.setAttribute('ondragleave', 'removeDropStyle(event)');
+                dropzone.setAttribute('ondrop', `dropArtist(event, '${tier.id}')`);
+
+                let assigned = artistsData.filter(a => a.location === tier.id);
+                if (searchQuery) {
+                    assigned = assigned.filter(a => a.name.toLowerCase().includes(searchQuery));
+                }
+
+                assigned.forEach(art => {
+                    dropzone.appendChild(createArtistCardElement(art));
+                });
+
+                const rightControls = document.createElement('div');
+                rightControls.className = 'w-10 bg-slate-950 border-l border-slate-800 flex flex-col items-center justify-center gap-1.5 p-1 shrink-0';
+                rightControls.innerHTML = `
+                    <button type="button" onclick="moveTierIndex(${index}, -1)" class="w-7 h-7 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-kickGreen flex items-center justify-center text-[11px] transition cursor-pointer shadow-sm" title="Subir fila"><i class="fa-solid fa-arrow-up"></i></button>
+                    <button type="button" onclick="moveTierIndex(${index}, 1)" class="w-7 h-7 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-kickGreen flex items-center justify-center text-[11px] transition cursor-pointer shadow-sm" title="Bajar fila"><i class="fa-solid fa-arrow-down"></i></button>
+                `;
+
+                row.appendChild(label);
+                row.appendChild(dropzone);
+                row.appendChild(rightControls);
+                container.appendChild(row);
+            });
+
+            const bankZone = document.getElementById('artist-bank');
+            bankZone.innerHTML = '';
+            let unranked = artistsData.filter(a => a.location === 'bank');
+            if (searchQuery) {
+                unranked = unranked.filter(a => a.name.toLowerCase().includes(searchQuery));
+            }
+
+            if (unranked.length === 0) {
+                const emptyMsg = searchQuery 
+                    ? `<span class="text-xs text-amber-400 italic p-2"><i class="fa-solid fa-magnifying-glass mr-1"></i> No se encontraron artistas con "${searchQuery}"</span>`
+                    : `<span class="text-xs text-slate-500 italic p-2">El banco de artistas está vacío. Añade uno arriba con el enlace de YouTube para cargar la portada automáticamente.</span>`;
+                bankZone.innerHTML = emptyMsg;
+            } else {
+                unranked.forEach(art => {
+                    bankZone.appendChild(createArtistCardElement(art));
+                });
+            }
+        }
+
+        function createArtistCardElement(art) {
+            const card = document.createElement('div');
+            card.className = 'artist-card relative w-24 sm:w-28 rounded-xl overflow-hidden border border-slate-700 bg-slate-950 cursor-pointer active:cursor-grabbing group shadow-md shrink-0 flex flex-col hover:border-kickGreen transition';
+            card.draggable = true;
+            card.id = art.id;
+            card.setAttribute('ondragstart', `dragArtist(event, '${art.id}')`);
+
+            card.onclick = (e) => {
+                if (e.target.closest('.delete-artist-btn') || e.target.closest('.edit-artist-btn')) return;
+
+                if (art.yt && art.yt.trim() !== '') {
+                    let rawUrl = art.yt.trim();
+                    let videoId = '';
+                    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+                    const match = rawUrl.match(regExp);
+
+                    if (match && match[2] && match[2].length === 11) {
+                        videoId = match[2];
+                    }
+
+                    const directUrl = videoId ? `https://www.youtube.com/watch?v=${videoId}` : (rawUrl.startsWith('http') ? rawUrl : `https://${rawUrl}`);
+                    window.open(directUrl, '_blank');
+                }
+            };
+
+            const deleteBtn = `<button type="button" onclick="deleteArtist('${art.id}', event)" class="delete-artist-btn absolute top-1 right-1 w-5 h-5 rounded-full bg-red-600 hover:bg-red-500 text-white flex items-center justify-center text-[9px] shadow-md z-20 transition" title="Eliminar artista"><i class="fa-solid fa-xmark"></i></button>`;
+            const editBtn = `<button type="button" onclick="editArtist('${art.id}', event)" class="edit-artist-btn absolute top-1 left-1 w-5 h-5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center justify-center text-[9px] shadow-md z-20 transition" title="Editar artista y link"><i class="fa-solid fa-gear"></i></button>`;
+
+            card.innerHTML = `
+                ${deleteBtn}
+                ${editBtn}
+                <div class="w-full aspect-video overflow-hidden bg-slate-900 pointer-events-none flex items-center justify-center relative">
+                    <img src="${art.img}" alt="${art.name}" class="w-full h-full object-cover object-center" onerror="this.src='https://placehold.co/120x68/1e293b/53fc18?text=Artist'">
+                </div>
+                <div class="bg-slate-950 px-1.5 py-1 flex items-center justify-center text-[10px] leading-snug font-bold text-center text-white break-words whitespace-normal w-full pointer-events-none shrink-0 border-t border-slate-800 min-h-[28px]">
+                    ${art.name}
+                </div>
+            `;
+            return card;
+        }
+
+        let editingArtistId = null;
+
+        function editArtist(artistId, event) {
+            if (event) event.stopPropagation();
+            const art = artistsData.find(a => a.id === artistId);
+            if (!art) return;
+            editingArtistId = artistId;
+            document.getElementById('edit-artist-id').value = artistId;
+            document.getElementById('edit-artist-name-input').value = art.name;
+            document.getElementById('edit-artist-yt-input').value = art.yt || '';
+            document.getElementById('edit-artist-modal').classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-artist-modal').classList.add('hidden');
+            editingArtistId = null;
+        }
+
+        function saveEditedArtist() {
+            if (!editingArtistId) return;
+            const art = artistsData.find(a => a.id === editingArtistId);
+            if (!art) return;
+
+            const newName = document.getElementById('edit-artist-name-input').value.trim();
+            const newYt = document.getElementById('edit-artist-yt-input').value.trim();
+
+            if (!newName) return;
+
+            art.name = newName;
+            if (newYt !== art.yt) {
+                art.yt = newYt;
+                const autoThumb = getYouTubeThumbnail(newYt);
+                if (autoThumb) {
+                    art.img = autoThumb;
+                }
+            }
+
+            saveData();
+            renderTierlist();
+            closeEditModal();
+        }
+
+        function deleteArtist(artistId, event) {
+            if (event) event.stopPropagation();
+            artistsData = artistsData.filter(a => a.id !== artistId);
+            saveData();
+            renderTierlist();
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.add('bg-slate-800/40', 'border-dashed', 'border-purple-500/50');
+        }
+
+        function removeDropStyle(ev) {
+            ev.currentTarget.classList.remove('bg-slate-800/40', 'border-dashed', 'border-purple-500/50');
+        }
+
+        function dragArtist(ev, id) {
+            ev.dataTransfer.setData('artistId', id);
+        }
+
+        function dropArtist(ev, locationId) {
+            ev.preventDefault();
+            removeDropStyle({ currentTarget: ev.currentTarget });
+            const artistId = ev.dataTransfer.dataTransfer ? ev.dataTransfer.getData('artistId') : ev.dataTransfer.getData('artistId');
+            const targetId = artistId || ev.dataTransfer.getData('artistId');
+            const target = artistsData.find(a => a.id === targetId);
+            if (target) {
+                target.location = locationId;
+                saveData();
+                renderTierlist();
+            }
+        }
+
+        function addNewTierCategory() {
+            const brightColors = ['#ff3b30', '#ff9500', '#ffcc00', '#34c759', '#007aff', '#af52de', '#ff2d55', '#00d2d3'];
+            const randomColor = brightColors[Math.floor(Math.random() * brightColors.length)];
+            tiersData.push({
+                id: 'tier-' + Date.now(),
+                name: 'NUEVA',
+                color: randomColor
+            });
+            renderTierlist();
+        }
+
+        function toggleArtistDropdown() {
+            const panel = document.getElementById('artist-dropdown-panel');
+            panel.classList.toggle('hidden');
+        }
+
+        function moveTierIndex(index, direction) {
+            const targetIndex = index + direction;
+            if (targetIndex < 0 || targetIndex >= tiersData.length) return;
+            const temp = tiersData[index];
+            tiersData[index] = tiersData[targetIndex];
+            tiersData[targetIndex] = temp;
+            renderTierlist();
+        }
+
+        function addNewArtistToBank() {
+            const nameInput = document.getElementById('new-artist-name');
+            const ytInput = document.getElementById('new-artist-yt');
+            const fileInput = document.getElementById('new-artist-file');
+
+            const name = nameInput.value.trim();
+            if (!name) return;
+
+            const ytLink = ytInput.value.trim();
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        artistsData.push({
+                            id: 'art-' + Date.now(),
+                            name: name,
+                            img: e.target.result,
+                            yt: ytLink,
+                            location: 'bank'
+                        });
+                        resetInputs(nameInput, ytInput, fileInput);
+                        saveData();
+                        renderTierlist();
+                    } catch(err) {
+                        console.error(err);
+                    }
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                const autoYtThumbnail = getYouTubeThumbnail(ytLink);
+                const finalImg = autoYtThumbnail || `https://placehold.co/150x150/1e293b/ffffff?text=${encodeURIComponent(name.substring(0, 4))}`;
+
+                try {
+                    artistsData.push({
+                        id: 'art-' + Date.now(),
+                        name: name,
+                        img: finalImg,
+                        yt: ytLink,
+                        location: 'bank'
+                    });
+                    resetInputs(nameInput, ytInput, fileInput);
+                    saveData();
+                    renderTierlist();
+                } catch(err) {
+                    console.error(err);
+                }
+            }
+        }
+
+        function resetInputs(nameInput, ytInput, fileInput) {
+            nameInput.value = '';
+            ytInput.value = '';
+            fileInput.value = '';
+            document.getElementById('file-label-text').innerText = 'Elegir Foto PC';
+        }
+
+        function updateFileLabel(input) {
+            const labelText = document.getElementById('file-label-text');
+            if (input.files && input.files[0]) {
+                labelText.innerText = input.files[0].name;
+            } else {
+                labelText.innerText = 'Elegir Foto PC';
+            }
+        }
+    </script>
+</body>
+</html>
